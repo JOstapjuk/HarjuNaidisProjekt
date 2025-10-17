@@ -3,13 +3,33 @@ const vue = Vue.createApp({
         return {
             gameInModal: { name: null },
             games: [],
-            newGame: { name: '', price: 0 }
+            newGame: { name: '', price: 0 },
+            sortKey: 'name',
+            sortOrder: 'asc'
         }
     },
     async created() {
         this.games = await (await fetch('http://localhost:8080/games')).json();
     },
+    computed: {
+        sortedGames() {
+            return [...this.games].sort((a, b) => {
+                let modifier = this.sortOrder === 'asc' ? 1 : -1;
+                if (a[this.sortKey] < b[this.sortKey]) return -1 * modifier;
+                if (a[this.sortKey] > b[this.sortKey]) return 1 * modifier;
+                return 0;
+            });
+        }
+    },
     methods: {
+        setSort(key) {
+            if (this.sortKey === key) {
+                this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortKey = key;
+                this.sortOrder = 'asc';
+            }
+        },
         getGame: async function (id) {
             this.gameInModal = await (await fetch(`http://localhost:8080/games/${id}`)).json();
             $('#gameInfoModal').modal('show');
