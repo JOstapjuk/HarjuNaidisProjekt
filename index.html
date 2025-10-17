@@ -28,11 +28,11 @@
             
             <table id="gamesTable" class="table table-striped table-bordered">
                 <tr>
-                    <th>Name</th>
-                    <th>Price</th>
+                    <th @click="setSort('name')" style="cursor: pointer;">Name</th>
+                    <th @click="setSort('price')" style="cursor: pointer;">Price</th>
                     <th>Tegevused</th>
                 </tr>
-                <tr v-for="game in games">
+                <tr v-for="game in sortedGames" :key="game.id">
                     <td @click="getGame(game.id)" style="cursor: pointer;">{{ game.name }}</td>
                     <td>{{ game.price }}</td>
                     <td>
