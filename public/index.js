@@ -70,9 +70,33 @@ app.delete('/games/:id', (req, res) => {
     res.status(204).send({error: 'No content'})
 })
 
+app.put('/games/:id', (req, res) => {
+    if (typeof (req.params.id) === 'undefined') {
+        return res.status(404).send({error: 'Game not found'})
+    }
+    
+    const id = parseInt(req.params.id);
+    const index = games.findIndex(game => game.id === id);
+    
+    if (index === -1) {
+        return res.status(404).send({error: 'Game not found'})
+    }
+    
+    if(!req.body.name || !req.body.price) {
+        return res.status(400).send({error: 'One or all params are missing'})
+    }
+    
+    games[index] = {
+        id: id,
+        name: req.body.name,
+        price: req.body.price
+    };
+    
+    res.send(games[index]);
+})
 
 //mongoose
-/* app.get('/games', async (req, res) => {
+app.get('/games2', async (req, res) => {
     try {
         const games = await Game.find();
         res.json(games);
@@ -81,7 +105,7 @@ app.delete('/games/:id', (req, res) => {
     }
 });
 
-app.post('/games', async (req, res) => {
+app.post('/games2', async (req, res) => {
     try {
         const lastGame = await Game.findOne().sort({ id: -1 });
         const newId = lastGame ? lastGame.id + 1 : 1;
@@ -99,7 +123,7 @@ app.post('/games', async (req, res) => {
     }
 });
 
-app.put('/games/:id', async (req, res) => {
+app.put('/games2/:id', async (req, res) => {
     try {
         const game = await Game.findOne({ id: req.params.id });
         if (!game) return res.status(404).json({ message: 'Game not found' });
@@ -114,7 +138,7 @@ app.put('/games/:id', async (req, res) => {
     }
 });
 
-app.delete('/games/:id', async (req, res) => {
+app.delete('/games2/:id', async (req, res) => {
     try {
         const result = await Game.deleteOne({ id: parseInt(req.params.id) });
         
@@ -126,7 +150,7 @@ app.delete('/games/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-}); */
+});
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
