@@ -9,7 +9,7 @@ const vue = Vue.createApp({
         }
     },
     async created() {
-        this.games = await (await fetch('http://localhost:8080/games')).json();
+        this.games = await (await fetch('http://localhost:8080/games2')).json();
     },
     computed: {
         sortedGames() {
@@ -31,18 +31,18 @@ const vue = Vue.createApp({
             }
         },
         getGame: async function (id) {
-            this.gameInModal = await (await fetch(`http://localhost:8080/games/${id}`)).json();
+            this.gameInModal = await (await fetch(`http://localhost:8080/games2/${id}`)).json();
             $('#gameInfoModal').modal('show');
         },
         addGame: async function (gameData) {
-            const response = await fetch('http://localhost:8080/games', {
+            const response = await fetch('http://localhost:8080/games2', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(gameData)
             });
-            
+           
             if (response.ok) {
                 const newGame = await response.json();
                 this.games.push(newGame);
@@ -56,7 +56,7 @@ const vue = Vue.createApp({
             $('#addGameModal').modal('hide');
         },
         deleteGame: async function (id) {
-            const response = await fetch(`http://localhost:8080/games/${id}`, {
+            const response = await fetch(`http://localhost:8080/games2/${id}`, {
                 method: 'DELETE'
             });
            
@@ -72,15 +72,15 @@ const vue = Vue.createApp({
                 ...updatedData,
                 price: parseFloat(updatedData.price)
             };
-            
-            const response = await fetch(`http://localhost:8080/games/${id}`, {
+           
+            const response = await fetch(`http://localhost:8080/games2/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(dataToSend)
             });
-        
+       
             if (response.ok) {
                 const updatedGame = await response.json();
                 const index = this.games.findIndex(game => game.id === id);

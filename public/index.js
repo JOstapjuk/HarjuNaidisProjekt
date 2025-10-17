@@ -96,6 +96,18 @@ app.put('/games/:id', (req, res) => {
 })
 
 //mongoose
+app.get('/games2/:id', async (req, res) => {
+    try {
+        const game = await Game.findOne({ id: parseInt(req.params.id) });
+        if (!game) {
+            return res.status(404).json({ message: 'Game not found' });
+        }
+        res.json(game);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 app.get('/games2', async (req, res) => {
     try {
         const games = await Game.find();
