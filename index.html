@@ -43,24 +43,6 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> <!-- Bootstrap 3 JS -->
         <script src="https://unpkg.com/vue@3.5.22/dist/vue.global.js"></script>
-        <script>
-            const vue = Vue.createApp({
-                data() {
-                    return {
-                    gameInModal: { name: null },
-                    games: []
-                    }
-                },
-                async created() {
-                    this.games = await (await fetch('http://localhost:8080/games')).json();
-                },
-                methods: {
-                    getGame: async function (id) {
-                        this.gameInModal = await (await fetch(`http://localhost:8080/games/${id}`)).json();
-                        $('#gameInfoModal').modal('show');
-                    }
-                }
-            }).mount('#app');
-        </script>
+        <script src="rest-client.js"></script>
     </body>
 </html>
